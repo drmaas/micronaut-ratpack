@@ -1,0 +1,3 @@
+rootProject.name = 'micronaut-ratpack'
+
+include 'ratpack-server'

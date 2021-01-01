@@ -1,0 +1,14 @@
+Example: https://github.com/micronaut-projects/micronaut-grpc
+and
+https://github.com/ratpack/ratpack/blob/master/ratpack-spring-boot/src/main/java/ratpack/spring/config/RatpackConfiguration.java
+
+Config
+* Ratpack config adapts to internal ratpack serverconfig
+
+User code
+* Annotate chain
+* Annotate client/server interceptors
+* Annotate exec interceptors
+
+Metrics
+* capture micrometer metrics?

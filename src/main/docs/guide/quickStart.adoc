@@ -1,0 +1,18 @@
+Add the following dependency to your Micronaut application:
+
+dependency:io.micronaut.ratpack:micronaut-ratpack[scope="compile", version="{version}"]
+
+Then build a Ratpack server:
+
+[source,java]
+----
+@Factory
+public class MyRatpackServer {
+
+  @Singleton
+  public RatpackServer ratpackServer() {
+
+  }
+
+}
+----
