@@ -35,12 +35,12 @@ import java.util.List;
 @Singleton
 public class ChainConfigurers implements Action<Chain> {
 
-    private final RatpackServerConfiguration configuration;
+    private final RatpackServerProperties configuration;
     private final List<Action<Chain>> delegates;
     private final List<Handler> handlers;
     private final List<RatpackServerCustomizer> customizers;
 
-    public ChainConfigurers(RatpackServerConfiguration configuration,
+    public ChainConfigurers(RatpackServerProperties configuration,
                             List<Action<Chain>> delegates,
                             List<Handler> handlers,
                             List<RatpackServerCustomizer> customizers) {
@@ -60,7 +60,7 @@ public class ChainConfigurers implements Action<Chain> {
             if (handlers.size() == 1 || delegates.isEmpty()) {
                 delegates.add(singleHandlerAction());
             }
-            delegates.add(staticResourcesAction(chain.getServerConfig()));
+            delegates.add(staticResourcesAction(chain1.getServerConfig()));
             delegates.sort((c1, c2) -> {
                 int c1Order = 0;
                 int c2Order = 0;
@@ -74,7 +74,7 @@ public class ChainConfigurers implements Action<Chain> {
             });
             for (Action<Chain> delegate : delegates) {
                 if (!(delegate instanceof ChainConfigurers)) {
-                    delegate.execute(chain);
+                    delegate.execute(chain1);
                 }
             }
         });

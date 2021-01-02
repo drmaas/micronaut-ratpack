@@ -19,6 +19,7 @@ package io.micronaut.ratpack.server;
 import io.micronaut.context.annotation.ConfigurationProperties;
 import io.micronaut.context.annotation.Property;
 import io.micronaut.context.env.Environment;
+import io.micronaut.core.annotation.Creator;
 import io.micronaut.core.io.socket.SocketUtils;
 import ratpack.server.ServerConfig;
 
@@ -31,8 +32,8 @@ import java.time.Duration;
  * @author drmaas
  * @since 1.0
  */
-@ConfigurationProperties(RatpackServerConfiguration.PREFIX)
-public class RatpackServerConfiguration {
+@ConfigurationProperties(RatpackServerProperties.PREFIX)
+public class RatpackServerProperties {
 
     public static final String PREFIX = "ratpack.server";
     public static final String PORT = PREFIX + ".port";
@@ -60,7 +61,24 @@ public class RatpackServerConfiguration {
     private int connectQueueSize = 0;
     private int writeSpinCount = 0;
     private String portFile = null;
-    private RatpackSslConfiguration sslConfiguration = null;
+    private RatpackSslProperties sslConfiguration = null;
+
+    /**
+     * Default constructor.
+     *
+     * @param environment      The environment
+     * @param host             The server host
+     * @param port             The server port
+     */
+    @Creator
+    public RatpackServerProperties(
+            Environment environment,
+            @Property(name = HOST) @Nullable String host,
+            @Property(name = PORT) @Nullable Integer port) {
+        this.port = port != null ? port :
+                environment.getActiveNames().contains(Environment.TEST) ? SocketUtils.findAvailableTcpPort() : DEFAULT_PORT;
+        this.host = host;
+    }
 
     /**
      * Gets the enabled.
@@ -427,7 +445,7 @@ public class RatpackServerConfiguration {
      *
      * @return the sslConfiguration
      */
-    public RatpackSslConfiguration getSslConfiguration() {
+    public RatpackSslProperties getSslConfiguration() {
         return sslConfiguration;
     }
 
@@ -436,33 +454,15 @@ public class RatpackServerConfiguration {
      *
      * @param sslConfiguration the sslConfiguration
      */
-    public void setSslConfiguration(RatpackSslConfiguration sslConfiguration) {
+    public void setSslConfiguration(RatpackSslProperties sslConfiguration) {
         this.sslConfiguration = sslConfiguration;
     }
 
     /**
-     * Default constructor.
-     *
-     * @param environment      The environment
-     * @param host       The server host
-     * @param port       The server port
-     */
-    public RatpackServerConfiguration(
-            Environment environment,
-            @Property(name = HOST) @Nullable String host,
-            @Property(name = PORT) @Nullable Integer port) {
-        this.port = port != null ? port :
-                environment.getActiveNames().contains(Environment.TEST) ? SocketUtils.findAvailableTcpPort() : DEFAULT_PORT;
-        this.host = host;
-    }
-
-
-
-    /**
      * The SSL configuration.
      */
-    @ConfigurationProperties(RatpackServerConfiguration.PREFIX + ".ssl")
-    public static class RatpackSslConfiguration {
+    @ConfigurationProperties(RatpackServerProperties.PREFIX + ".ssl")
+    public static class RatpackSslProperties {
         private String keyStoreFile = null;
         private String keyStorePass = null;
         private String trustStoreFile = null;

@@ -32,7 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 /**
- *  Builds the Ratpack {@link ServerConfigBuilder} from the micronaut {@link RatpackServerConfiguration}.
+ *  Builds the Ratpack {@link ServerConfigBuilder} from the micronaut {@link RatpackServerProperties}.
  *
  * @author drmaas
  * @since 1.0
@@ -40,9 +40,9 @@ import java.nio.file.Paths;
 @Factory
 public class RatpackServerConfigBuilderFactory {
 
-    private final RatpackServerConfiguration serverConfiguration;
+    private final RatpackServerProperties serverConfiguration;
 
-    public RatpackServerConfigBuilderFactory(RatpackServerConfiguration serverConfiguration) {
+    public RatpackServerConfigBuilderFactory(RatpackServerProperties serverConfiguration) {
         this.serverConfiguration = serverConfiguration;
     }
 
@@ -57,6 +57,8 @@ public class RatpackServerConfigBuilderFactory {
         ServerConfigBuilder builder = ServerConfig.builder();
         if (serverConfiguration.getBaseDir() != null) {
             builder.baseDir(new File(serverConfiguration.getBaseDir()));
+        } else {
+            builder.baseDir(new File(".").getAbsoluteFile());
         }
         builder.port(serverConfiguration.getPort());
         if (serverConfiguration.getHost() != null) {
@@ -95,7 +97,7 @@ public class RatpackServerConfigBuilderFactory {
             builder.portFile(new File(serverConfiguration.getPortFile()).toPath());
         }
         if (serverConfiguration.getSslConfiguration() != null) {
-            RatpackServerConfiguration.RatpackSslConfiguration ssl = serverConfiguration.getSslConfiguration();
+            RatpackServerProperties.RatpackSslProperties ssl = serverConfiguration.getSslConfiguration();
             if (!ssl.getKeyStoreFile().isEmpty()) {
                 KeyManagerFactory keyManagerFactory;
                 try (InputStream is = Files.newInputStream(Paths.get(ssl.getKeyStoreFile()))) {

@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Singleton
 @Secondary
 @Requires(classes = RatpackServer.class)
-@Requires(property = RatpackServerConfiguration.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
+@Requires(property = RatpackServerProperties.ENABLED, value = StringUtils.TRUE, defaultValue = StringUtils.TRUE)
 public class RatpackEmbeddedServer implements EmbeddedServer {
     private static final Logger LOG = LoggerFactory.getLogger(RatpackEmbeddedServer.class);
 

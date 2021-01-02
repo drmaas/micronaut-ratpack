@@ -1,0 +1,10 @@
+micronaut:
+  application:
+    name: test
+  server:
+    context-path: ctx
+    port: ${random.port}
+ratpack:
+  server:
+    context-path: ctx
+    port: ${random.port}
